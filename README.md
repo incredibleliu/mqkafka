@@ -49,3 +49,9 @@ java -jar "E:\m2repo\repository\org\apache\avro\avro-tools\1.10.0\avro-tools-1.1
 
 xml -> avro file
 ByteArraySerializer
+
+###################################################
+
+activemq
+cd E:\apache-activemq-5.16.0\bin\win64
+
