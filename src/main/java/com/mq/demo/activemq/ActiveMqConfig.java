@@ -33,6 +33,7 @@ public class ActiveMqConfig {
         connectionFactory.setPassword(BROKER_USERNAME);
         connectionFactory.setUserName(BROKER_PASSWORD);
         RedeliveryPolicy redeliveryPolicy = new RedeliveryPolicy();
+        redeliveryPolicy.setMaximumRedeliveryDelay(3000);
         redeliveryPolicy.setMaximumRedeliveries(10);
         connectionFactory.setRedeliveryPolicy(redeliveryPolicy);
         return connectionFactory;
