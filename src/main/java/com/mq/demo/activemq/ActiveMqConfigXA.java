@@ -1,7 +1,7 @@
 package com.mq.demo.activemq;
 
-import com.atomikos.icatch.jta.UserTransactionImp;
-import com.atomikos.icatch.jta.UserTransactionManager;
+import bitronix.tm.TransactionManagerServices;
+import bitronix.tm.resource.jms.PoolingConnectionFactory;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.ActiveMQXAConnectionFactory;
 import org.apache.activemq.RedeliveryPolicy;
@@ -11,42 +11,48 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.connection.SingleConnectionFactory;
 import org.springframework.jms.core.JmsTemplate;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.jta.JtaTransactionManager;
 
 import javax.jms.ConnectionFactory;
 import javax.jms.XAConnectionFactory;
 import javax.transaction.SystemException;
+import javax.transaction.TransactionManager;
+import javax.transaction.UserTransaction;
 
 @Configuration
 @EnableTransactionManagement
-public class ActiveMqConfig {
+public class ActiveMqConfigXA {
 
     String BROKER_URL = "tcp://localhost:61616";
     String BROKER_USERNAME = "admin";
     String BROKER_PASSWORD = "admin";
 
-    @Bean
-    public ActiveMQXAConnectionFactory connectionFactory(){
-        ActiveMQXAConnectionFactory connectionFactory = new ActiveMQXAConnectionFactory();
-        connectionFactory.setBrokerURL(BROKER_URL);
-        connectionFactory.setPassword(BROKER_USERNAME);
-        connectionFactory.setUserName(BROKER_PASSWORD);
-        RedeliveryPolicy redeliveryPolicy = new RedeliveryPolicy();
-        redeliveryPolicy.setMaximumRedeliveryDelay(3000);
-        redeliveryPolicy.setMaximumRedeliveries(3);
-        connectionFactory.setRedeliveryPolicy(redeliveryPolicy);
-        return connectionFactory;
-    }
+//    @Bean
+//    public ActiveMQXAConnectionFactory connectionFactory(){
+//        ActiveMQXAConnectionFactory connectionFactory = new ActiveMQXAConnectionFactory();
+//        connectionFactory.setBrokerURL(BROKER_URL);
+//        connectionFactory.setPassword(BROKER_PASSWORD);
+//        connectionFactory.setUserName(BROKER_USERNAME);
+//        RedeliveryPolicy redeliveryPolicy = new RedeliveryPolicy();
+//        redeliveryPolicy.setMaximumRedeliveryDelay(3000);
+//        redeliveryPolicy.setMaximumRedeliveries(3);
+//        connectionFactory.setRedeliveryPolicy(redeliveryPolicy);
+//        return connectionFactory;
+//    }
 
-    @Bean(initMethod = "init")
+    @Bean(initMethod = "init", destroyMethod = "close")
     public ConnectionFactory xaFactory(){
-        AtomikosConnectionFactoryBean atomikosConnectionFactoryBean = new AtomikosConnectionFactoryBean();
-        atomikosConnectionFactoryBean.setLocalTransactionMode(false);
-        atomikosConnectionFactoryBean.setPoolSize(30);
-        atomikosConnectionFactoryBean.setUniqueResourceName("xaFactory");
-        atomikosConnectionFactoryBean.setXaConnectionFactory(connectionFactory());
-        return atomikosConnectionFactoryBean;
+        PoolingConnectionFactory poolingConnectionFactory = new PoolingConnectionFactory();
+        poolingConnectionFactory.setClassName("org.apache.activemq.ActiveMQXAConnectionFactory");
+        poolingConnectionFactory.setUniqueName("xaFactory");
+        poolingConnectionFactory.setUser(BROKER_USERNAME);
+        poolingConnectionFactory.setPassword(BROKER_PASSWORD);
+        poolingConnectionFactory.setMinPoolSize(1);
+        poolingConnectionFactory.setMaxPoolSize(3);
+        poolingConnectionFactory.setAllowLocalTransactions(true);
+        return poolingConnectionFactory;
     }
 
     @Bean
@@ -57,44 +63,37 @@ public class ActiveMqConfig {
     }
 
     @Bean
-    public DefaultJmsListenerContainerFactory jmsListenerContainerFactory() throws SystemException{
+    public DefaultJmsListenerContainerFactory jmsListenerContainerFactory() throws Throwable{
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
-        //factory.setConnectionFactory(connectionFactory());
         factory.setConnectionFactory(singleConnectionFactory());
         factory.setConcurrency("1-1");
         factory.setSessionTransacted(true);
         factory.setReceiveTimeout((long) 3000);
-        //factory.setTransactionManager(jtaTransactionManager());
+        factory.setTransactionManager(platformTransactionManager());
         return factory;
     }
 
-    @Bean(initMethod = "init", destroyMethod = "close")
-    public UserTransactionManager userTransactionManager() throws SystemException {
-         UserTransactionManager userTransactionManager = new UserTransactionManager();
-         userTransactionManager.setTransactionTimeout(30000);
-         userTransactionManager.setForceShutdown(false);
-         return userTransactionManager;
+    @Bean
+    public TransactionManager transactionManager() {
+        return TransactionManagerServices.getTransactionManager();
     }
 
     @Bean
-    public UserTransactionImp userTransaction() throws SystemException {
-        UserTransactionImp userTransaction = new UserTransactionImp();
-        userTransaction.setTransactionTimeout(30000);
-        return userTransaction;
+    public UserTransaction userTransaction() {
+        return TransactionManagerServices.getTransactionManager();
     }
 
     @Bean
-    public JtaTransactionManager jtaTransactionManager() throws SystemException{
-        JtaTransactionManager jtaTransactionManager = new JtaTransactionManager();
-        jtaTransactionManager.setTransactionManager(userTransactionManager());
-        jtaTransactionManager.setUserTransaction(userTransaction());
-        return jtaTransactionManager;
+    public PlatformTransactionManager platformTransactionManager() throws Throwable {
+        UserTransaction userTransaction = userTransaction();
+        TransactionManager transactionManager = transactionManager();
+        return new JtaTransactionManager(userTransaction, transactionManager);
     }
 
     @Bean
     public JmsTemplate jmsTemplate(){
         JmsTemplate template = new JmsTemplate();
-        template.setConnectionFactory(connectionFactory());
+        template.setConnectionFactory(xaFactory());
         return template;
     }
 

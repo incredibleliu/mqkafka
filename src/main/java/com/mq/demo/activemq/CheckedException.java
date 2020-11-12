@@ -1,4 +1,5 @@
 package com.mq.demo.activemq;
 
-public class CheckedException {
+public class CheckedException extends Exception{
+
 }

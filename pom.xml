@@ -33,28 +33,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.atomikos</groupId>
-			<artifactId>transactions-jms</artifactId>
-			<version>5.0.8</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.atomikos</groupId>
-			<artifactId>transactions-jta</artifactId>
-			<version>5.0.8</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.atomikos</groupId>
-			<artifactId>transactions-api</artifactId>
-			<version>5.0.8</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/com.atomikos/atomikos-util -->
-		<dependency>
-			<groupId>com.atomikos</groupId>
-			<artifactId>atomikos-util</artifactId>
-			<version>5.0.8</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jta-bitronix</artifactId>
+			<version>2.3.5.RELEASE</version>
 		</dependency>
 
 		<dependency>
@@ -70,40 +51,10 @@
 <!--		</dependency>-->
 
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-jta-atomikos</artifactId>
-			<version>1.2.1.RELEASE</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-jta-bitronix</artifactId>
-			<version>2.3.4.RELEASE</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-jta-narayana</artifactId>
-			<version>2.0.9.RELEASE</version>
-		</dependency>
-
-		<dependency>
 			<groupId>javax.transaction</groupId>
 			<artifactId>jta</artifactId>
 			<version>1.1</version>
 		</dependency>
-
-<!--		<dependency>-->
-<!--			<groupId>javax.transaction</groupId>-->
-<!--			<artifactId>jta</artifactId>-->
-<!--			<version>1.1</version>-->
-<!--		</dependency>-->
-
-<!--		<dependency>-->
-<!--			<groupId>jotm</groupId>-->
-<!--			<artifactId>jotm</artifactId>-->
-<!--			<version>2.0.10</version>-->
-<!--		</dependency>-->
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

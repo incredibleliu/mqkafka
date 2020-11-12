@@ -20,8 +20,8 @@ public class Listener {
     private final Service service;
 
     @JmsListener(destination = "inbound.queue")
-    //@Transactional(rollbackFor = {KafkaNAException.class}, timeout = 100000, value = "jtaTransactionManager")
-    @Transactional(timeout = 100000, value = "jtaTransactionManager")
+    //@Transactional(rollbackFor = {CheckedException.class}, timeout = 100000, value = "jtaTransactionManager")
+    @Transactional(rollbackFor = {RuntimeException.class}, timeout = 100000, value = "platformTransactionManager")
     public String receiveMessage(final Message jsonMessage) throws JMSException {
         String messageData = null;
         String response = "ok";
