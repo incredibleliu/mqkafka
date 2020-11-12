@@ -67,7 +67,7 @@ public class ActiveMqConfigXA {
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
         factory.setConnectionFactory(singleConnectionFactory());
         factory.setConcurrency("1-1");
-        factory.setSessionTransacted(true);
+        factory.setSessionTransacted(false);
         factory.setReceiveTimeout((long) 3000);
         factory.setTransactionManager(platformTransactionManager());
         return factory;
