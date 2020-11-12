@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.jms.JMSException;
@@ -21,7 +22,8 @@ public class Listener {
 
     @JmsListener(destination = "inbound.queue")
     //@Transactional(rollbackFor = {CheckedException.class}, timeout = 100000, value = "jtaTransactionManager")
-    @Transactional(rollbackFor = {RuntimeException.class}, timeout = 100000, value = "platformTransactionManager")
+    //@Transactional(rollbackFor = {RuntimeException.class}, timeout = 100000, value = "platformTransactionManager")
+    @Transactional(timeout = 100000, value = "platformTransactionManager", propagation = Propagation.REQUIRED)
     public String receiveMessage(final Message jsonMessage) throws JMSException {
         String messageData = null;
         String response = "ok";
