@@ -39,14 +39,6 @@ public class ActiveMqConfig {
         return connectionFactory;
     }
 
-//    @Bean(initMethod = "init")
-//    com.atomikos.jms.AtomikosConnectionFactoryBean RealConnectionFactory(){
-//        AtomikosConnectionFactoryBean atomikosConnectionFactoryBean = new AtomikosConnectionFactoryBean();
-//        atomikosConnectionFactoryBean.setUniqueResourceName("");
-//        atomikosConnectionFactoryBean.setXaConnectionFactory(connectionFactory());
-//        return atomikosConnectionFactoryBean;
-//    }
-
     @Bean(initMethod = "init")
     public ConnectionFactory xaFactory(){
         AtomikosConnectionFactoryBean atomikosConnectionFactoryBean = new AtomikosConnectionFactoryBean();
@@ -75,7 +67,6 @@ public class ActiveMqConfig {
     public DefaultJmsListenerContainerFactory jmsListenerContainerFactory() throws SystemException{
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
         //factory.setConnectionFactory(connectionFactory());
-        //factory.setConnectionFactory(xaFactory());
         factory.setConnectionFactory(singleConnectionFactory());
         factory.setConcurrency("1-1");
         factory.setSessionTransacted(true);

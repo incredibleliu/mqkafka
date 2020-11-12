@@ -20,6 +20,18 @@
 
 	<dependencies>
 
+<!--		<dependency>-->
+<!--			<groupId>javax.resource</groupId>-->
+<!--			<artifactId>connector</artifactId>-->
+<!--			<version>1.0</version>-->
+<!--		</dependency>-->
+
+<!--		<dependency>-->
+<!--			<groupId>jotm</groupId>-->
+<!--			<artifactId>jotm</artifactId>-->
+<!--			<version>2.0.10</version>-->
+<!--		</dependency>-->
+
 		<dependency>
 			<groupId>com.atomikos</groupId>
 			<artifactId>transactions-jms</artifactId>
@@ -32,7 +44,6 @@
 			<version>5.0.8</version>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/com.atomikos/transactions-api -->
 		<dependency>
 			<groupId>com.atomikos</groupId>
 			<artifactId>transactions-api</artifactId>
@@ -45,8 +56,6 @@
 			<artifactId>atomikos-util</artifactId>
 			<version>5.0.8</version>
 		</dependency>
-
-
 
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -146,7 +155,7 @@
 		<dependency>
 		  <groupId>org.springframework.boot</groupId>
 		  <artifactId>spring-boot-starter-activemq</artifactId>
-		  </dependency>
+		</dependency>
 
 		  <dependency>
 			  <groupId>org.apache.activemq</groupId>
@@ -216,11 +225,11 @@
 			<version>2.12.0</version>
 		</dependency>
 
-		<dependency>
-			<groupId>io.confluent</groupId>
-			<artifactId>kafka-avro-serializer</artifactId>
-			<version>5.3.0</version>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>io.confluent</groupId>-->
+<!--			<artifactId>kafka-avro-serializer</artifactId>-->
+<!--			<version>5.3.0</version>-->
+<!--		</dependency>-->
 
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -266,6 +275,12 @@
 			<id>confluent</id>
 			<url>http://packages.confluent.io/maven/</url>
 		</repository>
+
+		<repository>
+			<id>glassfish-repo-archive</id>
+			<url>http://maven.glassfish.org/content/groups/glassfish</url>
+		</repository>
+
 	</repositories>
 
 

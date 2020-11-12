@@ -18,7 +18,7 @@ import java.sql.Timestamp;
 public class Listener {
 
     @JmsListener(destination = "inbound.queue")
-    @Transactional(rollbackFor = {RuntimeException.class},
+    @Transactional(rollbackFor = {KafkaNAException.class},
             timeout = 100000,
             value = "jtaTransactionManager")
     public String receiveMessage(final Message jsonMessage) throws JMSException {
@@ -28,7 +28,14 @@ public class Listener {
             TextMessage textMessage = (TextMessage)jsonMessage;
             messageData = textMessage.getText();
             log.info("### Received message " + messageData);
-            throw new RuntimeException("RuntimeException for XA");
+
+            //try catch NullPointerException
+            try{
+                throw new NullPointerException();
+            } catch(NullPointerException e){
+                e.printStackTrace();
+            }
+
         }
         return response;
     }
