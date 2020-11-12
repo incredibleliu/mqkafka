@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class Service {
 
-    @Retryable( value = RuntimeException.class, maxAttempts = 3, backoff = @Backoff(delay = 10000))
+    @Retryable( value = RuntimeException.class, maxAttempts = 3, backoff = @Backoff(delay = 1000))
     public void execute(){
 
             log.info("### retry...");
@@ -17,8 +17,9 @@ public class Service {
             try{
                 throw new NullPointerException();
             } catch(NullPointerException e){
-                e.printStackTrace();
+                System.out.println("### caught Exception ...");
             }
+//            throw new NullPointerException();
 
     }
 

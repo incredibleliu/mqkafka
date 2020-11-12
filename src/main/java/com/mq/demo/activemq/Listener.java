@@ -13,7 +13,7 @@ import javax.jms.TextMessage;
 
 @Slf4j
 @Component
-@EnableTransactionManagement
+//@EnableTransactionManagement
 @RequiredArgsConstructor
 public class Listener {
 
@@ -21,7 +21,7 @@ public class Listener {
 
     @JmsListener(destination = "inbound.queue")
     //@Transactional(rollbackFor = {KafkaNAException.class}, timeout = 100000, value = "jtaTransactionManager")
-    @Transactional(timeout = 100000, value = "jtaTransactionManager")
+    //@Transactional(timeout = 100000, value = "jtaTransactionManager")
     public String receiveMessage(final Message jsonMessage) throws JMSException {
         String messageData = null;
         String response = "ok";
