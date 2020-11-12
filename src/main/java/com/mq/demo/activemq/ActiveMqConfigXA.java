@@ -57,13 +57,6 @@ public class ActiveMqConfig {
     }
 
     @Bean
-    public JmsTemplate jmsTemplate(){
-        JmsTemplate template = new JmsTemplate();
-        template.setConnectionFactory(connectionFactory());
-        return template;
-    }
-
-    @Bean
     public DefaultJmsListenerContainerFactory jmsListenerContainerFactory() throws SystemException{
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
         //factory.setConnectionFactory(connectionFactory());
@@ -71,7 +64,7 @@ public class ActiveMqConfig {
         factory.setConcurrency("1-1");
         factory.setSessionTransacted(true);
         factory.setReceiveTimeout((long) 3000);
-        factory.setTransactionManager(jtaTransactionManager());
+        //factory.setTransactionManager(jtaTransactionManager());
         return factory;
     }
 
@@ -96,6 +89,13 @@ public class ActiveMqConfig {
         jtaTransactionManager.setTransactionManager(userTransactionManager());
         jtaTransactionManager.setUserTransaction(userTransaction());
         return jtaTransactionManager;
+    }
+
+    @Bean
+    public JmsTemplate jmsTemplate(){
+        JmsTemplate template = new JmsTemplate();
+        template.setConnectionFactory(connectionFactory());
+        return template;
     }
 
 }
