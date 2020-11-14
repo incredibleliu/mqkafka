@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.jta.JtaTransactionManager;
 
 import javax.jms.ConnectionFactory;
+import javax.jms.Session;
 import javax.jms.XAConnectionFactory;
 import javax.transaction.SystemException;
 
@@ -62,6 +63,7 @@ public class ActiveMqConfigNoXA {
         factory.setConnectionFactory(singleConnectionFactory());
         factory.setConcurrency("1-1");
         factory.setSessionTransacted(true);
+        factory.setSessionAcknowledgeMode(Session.SESSION_TRANSACTED);
         factory.setReceiveTimeout((long) 3000);
         return factory;
     }
